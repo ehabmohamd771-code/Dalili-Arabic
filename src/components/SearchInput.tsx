@@ -1,0 +1,137 @@
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { Keyboard, useWindowDimensions } from 'react-native';
+import { KeyboardController } from 'react-native-keyboard-controller';
+// the gesture handler's TextInput delivers touches to the native field through the gesture
+// system; the plain one asks its parents on Android not to intercept the touch, which cancels
+// the pull-down pan before it can activate
+import { GestureDetector, TextInput } from 'react-native-gesture-handler';
+import { useAnimatedStyle } from 'react-native-reanimated';
+import { useAtom } from '@gothub-team/got-atom';
+import { HomeFocusAtom } from '../atoms/HomeFocusAtom';
+import { SearchPullDownGestureAtom } from '../atoms/PullDownGestureAtom';
+import { SearchAtom } from '../atoms/SearchAtom';
+import { usePullDownBehavior } from '../hooks/usePullDownBehavior';
+import { setPath } from '../util/setPath';
+import { PURPLE_DARK, SEARCH_OPEN_TOP_RATIO, SEARCH_RESTING_TOP_RATIO } from '../util/constants';
+import { SearchIcon } from './Icons';
+import { KeyboardToolbarSearch } from './KeyboardToolbarSearch';
+import { MainInputBox } from './MainInputBox';
+
+export const SearchInput = () => {
+    const inputRef = useRef<TextInput>(null);
+    const focus = useAtom(HomeFocusAtom);
+    const search = useAtom(SearchAtom);
+    const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+    const searchOpenShift = -(windowHeight * (SEARCH_RESTING_TOP_RATIO - SEARCH_OPEN_TOP_RATIO));
+    const pullDistance = Math.max(1, -searchOpenShift);
+    const boxSearchActive = search.query.startsWith('#');
+    const keyboardType = boxSearchActive ? 'number-pad' : 'default';
+    const [inputFocused, setInputFocused] = useState(false);
+
+    useEffect(() => {
+        if (focus !== 'search') return;
+
+        const frame = requestAnimationFrame(() => inputRef.current?.focus());
+        return () => cancelAnimationFrame(frame);
+    }, [focus, keyboardType]);
+
+    useEffect(() => {
+        if (focus === 'search') return;
+
+        inputRef.current?.blur();
+    }, [focus]);
+
+    const beginSearchPullDown = useCallback(() => {
+        void KeyboardController.dismiss({ keepFocus: true });
+    }, []);
+
+    const cancelSearchPullDown = useCallback(() => {
+        inputRef.current?.focus();
+        KeyboardController.setFocusTo('current');
+        SearchAtom.set((a) => setPath(['show'], true, a));
+    }, []);
+
+    const completeSearchPullDown = useCallback(() => {
+        inputRef.current?.blur();
+        HomeFocusAtom.set('none');
+        void KeyboardController.dismiss({ keepFocus: false });
+        Keyboard.dismiss();
+    }, []);
+
+    const searchPullDownBehavior = usePullDownBehavior(SearchPullDownGestureAtom, {
+        enabled: focus === 'search',
+        distance: pullDistance,
+        onBegin: beginSearchPullDown,
+        onCancel: cancelSearchPullDown,
+        onComplete: completeSearchPullDown,
+    });
+    // worklets copy whole captured objects, so only the shared value may be closed over
+    const searchPullDownProgress = searchPullDownBehavior.progress;
+
+    useEffect(() => {
+        if (focus === 'search') {
+            searchPullDownBehavior.actions.reset();
+            return;
+        }
+
+        searchPullDownBehavior.actions.complete();
+    }, [focus, searchPullDownBehavior.actions]);
+
+    const setSearchQuery = (query: string) => {
+        SearchAtom.set((a) => setPath(['query'], query, a));
+    };
+
+    const handleChangeText = (text: string) => {
+        if (boxSearchActive || text.startsWith('#')) {
+            setSearchQuery(text ? `#${text.replace(/\D/g, '')}` : '');
+            return;
+        }
+
+        setSearchQuery(text);
+    };
+
+    return (
+        <Fragment>
+            <GestureDetector gesture={searchPullDownBehavior.gesture}>
+                <MainInputBox
+                    style={[
+                        {
+                            position: 'absolute',
+                            width: windowWidth - 60,
+                            top: windowHeight * SEARCH_RESTING_TOP_RATIO,
+                        },
+                        useAnimatedStyle(() => ({
+                            transform: [{ translateY: searchOpenShift * (1 - searchPullDownProgress.value) }],
+                        })),
+                    ]}
+                >
+                    <SearchIcon color1={PURPLE_DARK} />
+                    <TextInput
+                        key={keyboardType}
+                        ref={inputRef}
+                        value={search.query}
+                        keyboardType={keyboardType}
+                        style={{
+                            flex: 1,
+                            height: '100%',
+                            fontSize: 25,
+                            color: PURPLE_DARK,
+                            textAlignVertical: 'center',
+                            paddingVertical: 0,
+                        }}
+                        autoComplete="off"
+                        spellCheck={false}
+                        onTouchEnd={(e) => e.stopPropagation()}
+                        onFocus={() => {
+                            setInputFocused(true);
+                            HomeFocusAtom.set('search');
+                        }}
+                        onBlur={() => setInputFocused(false)}
+                        onChangeText={handleChangeText}
+                    />
+                </MainInputBox>
+            </GestureDetector>
+            <KeyboardToolbarSearch visible={focus === 'search' && inputFocused} />
+        </Fragment>
+    );
+};

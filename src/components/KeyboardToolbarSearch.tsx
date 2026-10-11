@@ -1,0 +1,80 @@
+import { TouchableOpacity, View } from 'react-native';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAtom } from '@gothub-team/got-atom';
+import { SearchAtom } from '../atoms/SearchAtom';
+import { setPath } from '../util/setPath';
+import { PURPLE_DARK, KEYBOARD_TOOLBAR_HEIGHT, WHITE } from '../util/constants';
+import { BoxIcon, TextIcon } from './Icons';
+
+type KeyboardToolbarSearchProps = {
+    visible: boolean;
+};
+
+// box search switch beside the keyboard dismiss button of the home screen,
+// shown only while the search field itself is focused
+export const KeyboardToolbarSearch = ({ visible }: KeyboardToolbarSearchProps) => {
+    const insets = useSafeAreaInsets();
+    const search = useAtom(SearchAtom);
+    const boxSearchActive = search.query.startsWith('#');
+
+    if (!visible) return null;
+
+    const setSearchQuery = (query: string) => {
+        SearchAtom.set((a) => setPath(['query'], query, a));
+    };
+
+    const handleBoxSearchPress = () => {
+        const query = SearchAtom.get().query;
+
+        if (query.startsWith('#')) {
+            setSearchQuery('');
+            return;
+        }
+
+        const digits = query.replace(/\D/g, '');
+        setSearchQuery(`#${digits}`);
+    };
+
+    return (
+        <KeyboardStickyView
+            enabled={visible}
+            offset={{ closed: KEYBOARD_TOOLBAR_HEIGHT, opened: 0 }}
+            pointerEvents="box-none"
+            style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: KEYBOARD_TOOLBAR_HEIGHT,
+            }}
+        >
+            <View
+                pointerEvents="box-none"
+                style={{
+                    height: KEYBOARD_TOOLBAR_HEIGHT,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingLeft: 16 + insets.left,
+                }}
+            >
+                <TouchableOpacity
+                    accessibilityLabel={boxSearchActive ? 'البحث بالوسوم' : 'البحث بالصندوق'}
+                    style={{
+                        width: 44,
+                        height: 44,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 12,
+                        backgroundColor: `${WHITE}CC`,
+                    }}
+                    onPress={handleBoxSearchPress}
+                >
+                    <View style={{ width: 28, height: 28 }}>
+                        {boxSearchActive ? <TextIcon color1={PURPLE_DARK} /> : <BoxIcon color1={PURPLE_DARK} />}
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </KeyboardStickyView>
+    );
+};

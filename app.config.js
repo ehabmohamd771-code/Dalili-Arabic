@@ -1,0 +1,123 @@
+module.exports = () => {
+    const isDev = process.env.BUILD_PROFILE === 'dev';
+    // IzzyOnDroid forbids apps that fetch executable code on their own, so
+    // the izzy build profile ships without OTA updates (repo updates instead)
+    const isIzzy = process.env.IZZY_BUILD === '1';
+
+    // Forks can build under their own identity without touching tracked files:
+    // set these in a local .env (see README) or the build environment.
+    const bundleId = process.env.DALILI_BUNDLE_ID ?? 'com.retal.dalili';
+    const devBundleId = process.env.DALILI_DEV_BUNDLE_ID ?? 'com.retal.dalili.dev';
+    const appBundleId = isDev ? devBundleId : bundleId;
+
+    console.log('Building for profile:', isDev ? 'dev' : 'prod');
+
+    return {
+        expo: {
+            name: isDev ? 'dalili-dev' : 'دليلي',
+            slug: isDev ? 'dalili-dev' : 'dalili',
+            version: '1.1.1',
+            runtimeVersion: {
+                policy: 'fingerprint',
+            },
+            updates: { enabled: false },
+            orientation: 'portrait',
+            icon: './assets/images/icon.png',
+            scheme: 'dalili',
+            userInterfaceStyle: 'automatic',
+            // Android paints this wherever a blur target is transparent and behind
+            // screens while they transition, so it has to be the app background
+            backgroundColor: '#23153a',
+            newArchEnabled: true,
+            // system dialogs (camera permission, "Foto benutzen"/"Wiederholen")
+            // follow the languages the app declares; German is the primary one
+            locales: {
+                de: './assets/locales/de.json',
+                en: './assets/locales/en.json',
+                ar: './assets/locales/ar.json',
+            },
+            ios: {
+                supportsTablet: false,
+                bundleIdentifier: appBundleId,
+                buildNumber: '14',
+                infoPlist: {
+                    CFBundleDevelopmentRegion: 'de',
+                    CFBundleLocalizations: ['de', 'en', 'ar'],
+                    ITSAppUsesNonExemptEncryption: false,
+                    UISupportsDocumentBrowser: true,
+                    UIFileSharingEnabled: true,
+                    LSSupportsOpeningDocumentsInPlace: true,
+                    UIStatusBarStyle: 'UIStatusBarStyleLightContent',
+                    UIViewControllerBasedStatusBarAppearance: false,
+                },
+            },
+            android: {
+                adaptiveIcon: {
+                    foregroundImage: './assets/images/adaptive-icon.png',
+                    backgroundColor: '#442871',
+                    borderColor: '#442871',
+                },
+                package: appBundleId,
+                // versionCode lives in git so source builds (F-Droid) get the
+                // real value; bump together with version on every release
+                versionCode: 9,
+                // the app is fully offline; INTERNET comes from the Expo
+                // template (Metro needs it in dev) and ACCESS_NETWORK_STATE
+                // from expo-updates, whose OTA updates are disabled here
+                ...(isIzzy
+                    ? {
+                          blockedPermissions: [
+                              'android.permission.INTERNET',
+                              'android.permission.ACCESS_NETWORK_STATE',
+                          ],
+                      }
+                    : {}),
+                statusBar: {
+                    barStyle: 'light-content',
+                    backgroundColor: '#442871',
+                },
+            },
+            web: {
+                bundler: 'metro',
+                output: 'static',
+                favicon: './assets/images/favicon.png',
+            },
+            plugins: [
+                'expo-router',
+                [
+                    'expo-splash-screen',
+                    {
+                        image: './assets/images/splash-icon.png',
+                        imageWidth: 200,
+                        resizeMode: 'contain',
+                        backgroundColor: '#442871',
+                    },
+                ],
+                'expo-sqlite',
+                'expo-font',
+                [
+                    'expo-image-picker',
+                    {
+                        // fallback; the localized strings live in assets/locales
+                        cameraPermission:
+                            'يستخدم تطبيق دليلي الكاميرا لتصوير الأغراض وحفظ صورها على جهازك، حتى تتمكن من العثور عليها لاحقًا.',
+                        photosPermission: false,
+                        microphonePermission: false,
+                    },
+                ],
+                // IzzyOnDroid caps APKs at ~30 MB; compressing the native libs
+                // (legacy packaging) keeps the izzy build under that limit
+                ...(isIzzy
+                    ? [
+                          ['expo-build-properties', { android: { useLegacyPackaging: true } }],
+                          './plugins/withNoDependencyInfo',
+                      ]
+                    : []),
+            ],
+            experiments: {
+                typedRoutes: true,
+            },
+            
+        },
+    };
+};

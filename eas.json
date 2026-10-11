@@ -1,0 +1,36 @@
+{
+    "cli": {
+        "version": ">= 16.0.1",
+        "appVersionSource": "local"
+    },
+    "build": {
+        "development": {
+            "developmentClient": true,
+            "distribution": "internal"
+        },
+        "preview": {
+            "distribution": "internal",
+            "channel": "preview"
+        },
+        "production": {
+            "channel": "production",
+            "android": {
+                "buildType": "apk"
+            }
+        },
+        "izzy": {
+            "extends": "production",
+            "env": {
+                "IZZY_BUILD": "1",
+                "ORG_GRADLE_PROJECT_reactNativeArchitectures": "arm64-v8a"
+            }
+        }
+    },
+    "submit": {
+        "production": {
+            "ios": {
+                "ascAppId": "6799661330"
+            }
+        }
+    }
+}

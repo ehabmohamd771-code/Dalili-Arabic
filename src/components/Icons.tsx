@@ -1,0 +1,334 @@
+import { View } from 'react-native';
+import Svg, { Circle, Line, Path, Polygon, Rect } from 'react-native-svg';
+import { NONE } from '../util/constants';
+
+type IconProps = {
+    color1: string;
+};
+
+export const SearchIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                opacity: 0.9,
+                aspectRatio: 1,
+            }}
+            viewBox="-1 -1 31.71 31.71"
+        >
+            <Path fill={NONE} strokeWidth={2} stroke={color1} d="M30.21,30.21l-9.47-9.47" />
+            <Circle fill={NONE} strokeWidth={2} stroke={color1} cx="12.85" cy="12.85" r="11.35" />
+            <Path
+                fill={NONE}
+                strokeWidth={1}
+                stroke={color1}
+                d="M12.85,20.21c-4.05,0-7.35-3.3-7.35-7.35s3.3-7.35,7.35-7.35,7.35,3.3,7.35,7.35-3.3,7.35-7.35,7.35Z"
+            />
+        </Svg>
+    </View>
+);
+
+type BoxIconProps = {
+    color1?: string;
+    color2?: string;
+};
+export const BoxIcon = ({ color1, color2 }: BoxIconProps) => (
+    <View>
+        <Svg
+            style={{
+                opacity: 0.9,
+                aspectRatio: 1,
+            }}
+            viewBox="-3 -3 73.32 73.32"
+        >
+            <Rect
+                fill={color2 ?? NONE}
+                stroke={color1 ?? NONE}
+                strokeWidth={3.8}
+                x="7.21"
+                y="43.18"
+                width="24.14"
+                height="24.14"
+                rx="6.09"
+                ry="6.09"
+            />
+            <Rect
+                fill={color2 ?? NONE}
+                stroke={color1 ?? NONE}
+                strokeWidth={3.8}
+                x="7.21"
+                y="14.43"
+                width="24.14"
+                height="24.14"
+                rx="6.09"
+                ry="6.09"
+            />
+            <Rect
+                fill={color2 ?? NONE}
+                stroke={color1 ?? NONE}
+                strokeWidth={3.8}
+                x="35.96"
+                y="14.43"
+                width="24.14"
+                height="52.89"
+                rx="6.09"
+                ry="6.09"
+            />
+            <Path
+                fill={color2 ?? NONE}
+                stroke={color1 ?? NONE}
+                strokeWidth={3.8}
+                d="M58.86,0H8.46C3.79,0,0,3.79,0,8.46v4.25s0,.04,0,.06c.02,2.09,2.82,2.79,3.94,1.02,1.52-2.39,4.19-3.98,7.23-3.98h16.22c1.88,0,3.61.61,5.02,1.63.74.54,1.74.54,2.48,0,1.41-1.03,3.15-1.63,5.02-1.63h16.23c3.04,0,5.71,1.59,7.23,3.98,1.12,1.76,3.92,1.07,3.94-1.02,0-.02,0-.04,0-.06v-4.25c0-4.67-3.79-8.46-8.46-8.46Z"
+            />
+        </Svg>
+    </View>
+);
+
+export const ApertureIcon = ({ color1 }: IconProps) => (
+    <Svg style={{}} viewBox="-2 -2 101 101">
+        <Circle stroke={color1} strokeWidth={3} fill={NONE} cx="48.5" cy="48.5" r="47.5" />
+        <Polygon
+            fill={color1}
+            points="48.5 29.01 33.26 36.35 29.5 52.84 40.04 66.06 56.96 66.06 67.5 52.84 63.74 36.35 48.5 29.01"
+        />
+        <Line stroke={color1} strokeWidth={3} x1="34.77" y1="93.88" x2="67.5" y2="52.84" />
+        <Line stroke={color1} strokeWidth={3} x1="4.35" y1="66.06" x2="56.96" y2="66.06" />
+        <Line stroke={color1} strokeWidth={3} x1="7.25" y1="24.94" x2="40.04" y2="66.06" />
+        <Line stroke={color1} strokeWidth={3} x1="41.2" y1="1.56" x2="29.5" y2="52.84" />
+        <Line stroke={color1} strokeWidth={3} x1="80.64" y1="13.53" x2="33.26" y2="36.35" />
+        <Line stroke={color1} strokeWidth={3} x1="95.88" y1="51.83" x2="48.5" y2="29.01" />
+        <Line stroke={color1} strokeWidth={3} x1="75.44" y1="87.62" x2="63.74" y2="36.35" />
+    </Svg>
+);
+
+export const CrossIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+            }}
+            viewBox="0 0 12.57 12.57"
+        >
+            <Path
+                fill={color1}
+                d="M8.06,6.28l4.14-4.14c.49-.49.49-1.29,0-1.78-.49-.49-1.29-.49-1.78,0l-4.14,4.14L2.15.37C1.65-.12.86-.12.37.37-.12.86-.12,1.65.37,2.15l4.14,4.14L.37,10.42c-.49.49-.49,1.29,0,1.78.25.25.57.37.89.37s.64-.12.89-.37l4.14-4.14,4.14,4.14c.25.25.57.37.89.37s.64-.12.89-.37c.49-.49.49-1.29,0-1.78l-4.14-4.14Z"
+            />
+        </Svg>
+    </View>
+);
+
+export const SaveIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={0.9}
+            viewBox="0 0 24 24"
+        >
+            <Path
+                stroke={color1}
+                fill="none"
+                d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
+            />
+            <Path stroke={color1} fill="none" d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <Path stroke={color1} fill="none" d="M14 4l0 4l-6 0l0 -4" />
+        </Svg>
+    </View>
+);
+
+export const CloseDownIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={2}
+            strokeLinecap="round"
+            viewBox="0 0 24 16"
+        >
+            <Path stroke={color1} fill="none" d="M4 11l8 3l8 -3" />
+        </Svg>
+    </View>
+);
+
+export const KeyboardDownIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            viewBox="0 0 24 24"
+        >
+            <Path
+                stroke={color1}
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+                d="M2.5 8l9.5 9.5 9.5-9.5"
+            />
+        </Svg>
+    </View>
+);
+
+export const TextIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={color1}
+            strokeWidth={1.4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <Path d="M3 19v-10.5a3.5 3.5 0 0 1 7 0v10.5" />
+            <Path d="M3 13h7" />
+            <Path d="M14 19v-10.5a3.5 3.5 0 0 1 7 0v10.5" />
+            <Path d="M14 13h7" />
+        </Svg>
+    </View>
+);
+
+export const SegmentIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={1.2}
+            strokeLinecap="round"
+            stroke={color1}
+            fill="none"
+            viewBox="0 0 24 24"
+        >
+            <Path d="M16 4h2a2 2 0 0 1 2 2v2" />
+            <Path d="M20 16v2a2 2 0 0 1 -2 2h-2" />
+            <Path d="M8 20h-2a2 2 0 0 1 -2 -2v-2" />
+            <Path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+        </Svg>
+    </View>
+);
+
+export const ArrowLeftIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={1.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            viewBox="0 0 24 24"
+        >
+            <Path stroke={color1} fill="none" d="M19 12h-14" />
+            <Path stroke={color1} fill="none" d="M11 18l-6 -6l6 -6" />
+        </Svg>
+    </View>
+);
+
+// the segment frame with a caret: "continue from framing"
+export const SegmentNextIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={1.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            stroke={color1}
+            fill="none"
+            viewBox="0 0 24 24"
+        >
+            <Path d="M9 7.5h1.5a1.5 1.5 0 0 1 1.5 1.5v1.5" />
+            <Path d="M12 13.5v1.5a1.5 1.5 0 0 1 -1.5 1.5h-1.5" />
+            <Path d="M6 16.5h-1.5a1.5 1.5 0 0 1 -1.5 -1.5v-1.5" />
+            <Path d="M3 10.5v-1.5a1.5 1.5 0 0 1 1.5 -1.5h1.5" />
+            <Path d="M15 5.5l6.5 6.5l-6.5 6.5" />
+        </Svg>
+    </View>
+);
+
+export const BackIcon = ({ color1 }: IconProps) => (
+    <Svg style={{}} strokeWidth="3" viewBox="3.5 3.5 18 18">
+        <Path stroke={color1} strokeLinecap="round" fill="none" d="M9 14l-4 -4l4 -4" />
+        <Path stroke={color1} strokeLinecap="round" fill="none" d="M5 10h11a4 4 0 1 1 0 8h-1" />
+    </Svg>
+);
+
+// tabler "tags"
+export const TagsIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={1.08}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            viewBox="0 0 24 24"
+        >
+            <Path
+                stroke={color1}
+                fill="none"
+                d="M3 8v4.172a2 2 0 0 0 .586 1.414l5.71 5.71a2.41 2.41 0 0 0 3.408 0l3.592 -3.592a2.41 2.41 0 0 0 0 -3.408l-5.71 -5.71a2 2 0 0 0 -1.414 -.586h-4.172a2 2 0 0 0 -2 2"
+            />
+            <Path stroke={color1} fill="none" d="M18 19l1.592 -1.592a4.82 4.82 0 0 0 0 -6.816l-4.592 -4.592" />
+            <Path stroke={color1} fill="none" d="M7 10h-.01" />
+        </Svg>
+    </View>
+);
+
+// tabler "tag-plus"
+export const TagPlusIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={1.08}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            viewBox="0 0 24 24"
+        >
+            <Path stroke={color1} fill="none" d="M6.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <Path
+                stroke={color1}
+                fill="none"
+                d="M21.002 13c0 -.617 -.235 -1.233 -.706 -1.704l-7.71 -7.71c-.375 -.375 -.884 -.586 -1.414 -.586h-5.172c-1.657 0 -3 1.343 -3 3v5.172c0 .53 .211 1.039 .586 1.414l7.71 7.71c.471 .47 1.087 .706 1.704 .706"
+            />
+            <Path stroke={color1} fill="none" d="M16 19h6" />
+            <Path stroke={color1} fill="none" d="M19 16v6" />
+        </Svg>
+    </View>
+);
+
+// tabler "chevron-left"
+export const ChevronLeftIcon = ({ color1 }: IconProps) => (
+    <View>
+        <Svg
+            style={{
+                aspectRatio: 1,
+                opacity: 0.9,
+            }}
+            strokeWidth={1.08}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            viewBox="0 0 24 24"
+        >
+            <Path stroke={color1} fill="none" d="M15 6l-6 6l6 6" />
+        </Svg>
+    </View>
+);
